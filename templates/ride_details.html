@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Ride Details
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ ride.origin }} to {{ ride.destination }}</h5>
+        <p class="card-text">
+            <strong>Date:</strong> {{ ride.date }}<br>
+            <strong>Time:</strong> {{ ride.time }}<br>
+            <strong>Price:</strong> ₦{{ ride.price }}<br>
+            <strong>Seats Available:</strong> {{ ride.seats }}<br>
+            <strong>Status:</strong> {{ ride.status }}<br>
+            <strong>Driver:</strong> {{ driver.name }} (Rating: {{ "%.1f"|format(driver.rating_avg) }})
+            {% if current_user.is_authenticated and ride.driver_id != current_user.id %}
+            <a href="{{ url_for('main.report_user', user_id=driver.id) }}" class="text-danger ms-2"><small>Report Driver</small></a>
+            {% endif %}
+        </p>
+        
+        {% if current_user.is_authenticated %}
+            {% if ride.driver_id != current_user.id %}
+                <div class="mb-3 text-end">
+                     <a href="{{ url_for('main.report_ride', ride_id=ride.id) }}" class="btn btn-outline-danger btn-sm">Report Ride</a>
+                </div>
+            {% endif %}
+            
+            {% if ride.driver_id == current_user.id %}
+                <div class="mb-3">
+                    {% if ride.status == 'open' %}
+                    <a href="{{ url_for('main.edit_ride', ride_id=ride.id) }}" class="btn btn-warning">Edit Ride</a>
+                    <form action="{{ url_for('main.cancel_ride', ride_id=ride.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this ride?');">
+                        <button type="submit" class="btn btn-danger">Cancel Ride</button>
+                    </form>
+                    <form action="{{ url_for('main.complete_ride', ride_id=ride.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Mark ride as completed?');">
+                        <button type="submit" class="btn btn-success">Complete Ride</button>
+                    </form>
+                    {% endif %}
+                    <a href="{{ url_for('main.ride_chat', ride_id=ride.id) }}" class="btn btn-info">Open Chat</a>
+                </div>
+                
+                <hr>
+                <h5>Bookings</h5>
+                {% if driver_bookings %}
+                <ul class="list-group">
+                    {% for b in driver_bookings %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Booking #{{ b.id }} (Rider ID: {{ b.rider_id }}) - Status: {{ b.status }}
+                        <div>
+                            {% if b.status == 'pending' %}
+                            <a href="{{ url_for('main.approve_booking', booking_id=b.id) }}" class="btn btn-sm btn-success">Approve</a>
+                            <a href="{{ url_for('main.reject_booking', booking_id=b.id) }}" class="btn btn-sm btn-danger">Reject</a>
+                            {% endif %}
+                            {% if b.status == 'confirmed' %}
+                            <a href="{{ url_for('main.rate_user', ride_id=ride.id, user_id=b.rider_id) }}" class="btn btn-sm btn-outline-primary">Rate Rider</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No bookings yet.</p>
+                {% endif %}
+                
+            {% else %}
+                {% if booking %}
+                    <div class="alert alert-info">
+                        Booking Status: {{ booking.status }}
+                    </div>
+                    {% if booking.status == 'approved' %}
+                        <form action="{{ url_for('main.pay_booking', booking_id=booking.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-success">Pay Now (Simulate)</button>
+                        </form>
+                    {% endif %}
+                    {% if booking.status == 'confirmed' %}
+                        <a href="{{ url_for('main.ride_chat', ride_id=ride.id) }}" class="btn btn-info">Open Chat</a>
+                        <a href="{{ url_for('main.receipt', booking_id=booking.id) }}" class="btn btn-secondary">View Receipt</a>
+                        <a href="{{ url_for('main.rate_user', ride_id=ride.id, user_id=ride.driver_id) }}" class="btn btn-outline-primary">Rate Driver</a>
+                    {% endif %}
+                {% else %}
+                    <form action="{{ url_for('main.book_ride', ride_id=ride.id) }}" method="POST">
+                        <button type="submit" class="btn btn-success">Book Ride</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Book</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

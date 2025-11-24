@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Commute Savings Calculator</div>
+            <div class="card-body">
+                <p>Compare the cost of RideShare360 vs. Standard Transport (e.g., Taxi/Uber).</p>
+                
+                <form id="calcForm">
+                    <div class="mb-3">
+                        <label for="distance" class="form-label">Distance (km)</label>
+                        <input type="number" class="form-control" id="distance" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="trips" class="form-label">Trips per week</label>
+                        <input type="number" class="form-control" id="trips" value="5" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Calculate Savings</button>
+                </form>
+                
+                <div id="results" class="mt-4 d-none">
+                    <hr>
+                    <h4>Weekly Costs</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h5>Standard Transport</h5>
+                                    <h3 class="text-danger">₦<span id="standardCost">0</span></h3>
+                                    <small class="text-muted">Est. ₦200/km</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h5>RideShare360</h5>
+                                    <h3 class="text-success">₦<span id="rideShareCost">0</span></h3>
+                                    <small class="text-muted">Est. ₦50/km (Shared)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-success mt-3 text-center">
+                        You could save <strong>₦<span id="savings">0</span></strong> per week!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('calcForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const distance = parseFloat(document.getElementById('distance').value);
+    const trips = parseFloat(document.getElementById('trips').value);
+    
+    // Assumptions
+    const standardRate = 200; // Naira per km
+    const rideShareRate = 50; // Naira per km
+    
+    const standardTotal = distance * standardRate * trips;
+    const rideShareTotal = distance * rideShareRate * trips;
+    const savings = standardTotal - rideShareTotal;
+    
+    document.getElementById('standardCost').textContent = standardTotal.toLocaleString();
+    document.getElementById('rideShareCost').textContent = rideShareTotal.toLocaleString();
+    document.getElementById('savings').textContent = savings.toLocaleString();
+    
+    document.getElementById('results').classList.remove('d-none');
+});
+</script>
+{% endblock %}

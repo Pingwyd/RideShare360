@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-success mb-3">
+            <div class="card-header bg-success text-white">Payment Receipt</div>
+            <div class="card-body text-success">
+                <h5 class="card-title">Transaction Successful</h5>
+                <p class="card-text">
+                    <strong>Transaction ID:</strong> {{ payment.transaction_id }}<br>
+                    <strong>Date:</strong> {{ payment.paid_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                    <strong>Amount Paid:</strong> ₦{{ payment.amount }}
+                </p>
+                <hr>
+                <h6>Ride Details</h6>
+                <p>
+                    <strong>Driver:</strong> {{ driver.name }}<br>
+                    <strong>From:</strong> {{ ride.origin }}<br>
+                    <strong>To:</strong> {{ ride.destination }}<br>
+                    <strong>Date:</strong> {{ ride.date }} {{ ride.time }}
+                </p>
+                <div class="text-center mt-4">
+                    <button onclick="window.print()" class="btn btn-outline-success">Print Receipt</button>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        Chat Room: {{ ride.origin }} - {{ ride.destination }}
+    </div>
+    <div class="card-body" id="chat-box" style="height: 400px; overflow-y: scroll;">
+        {% for msg in messages %}
+        <div class="mb-2">
+            <strong>{{ msg.sender_id }}</strong> <small class="text-muted">{{ msg.timestamp }}</small><br>
+            {{ msg.message }}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="card-footer">
+        <form id="message-form">
+            <div class="input-group">
+                <input type="text" id="message-input" class="form-control" placeholder="Type a message..." required>
+                <button class="btn btn-primary" type="submit">Send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+    var socket = io();
+    var rideId = {{ ride.id }};
+    var currentUser = "{{ current_user.name }}";
+
+    socket.on('connect', function() {
+        socket.emit('join', {room: rideId});
+    });
+
+    socket.on('status', function(data) {
+        var chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += '<div class="text-center text-muted"><small>' + data.msg + '</small></div>';
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    socket.on('message', function(data) {
+        var chatBox = document.getElementById('chat-box');
+        var sender = data.sender || 'Unknown';
+        var time = data.timestamp || new Date().toLocaleTimeString();
+        chatBox.innerHTML += '<div class="mb-2"><strong>' + sender + '</strong> <small class="text-muted">' + time + '</small><br>' + data.msg + '</div>';
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    document.getElementById('message-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var input = document.getElementById('message-input');
+        var msg = input.value;
+        if (msg) {
+            socket.emit('message', {room: rideId, msg: msg});
+            input.value = '';
+        }
+    });
+</script>
+{% endblock %}

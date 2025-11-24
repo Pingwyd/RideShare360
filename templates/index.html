@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section text-center text-white">
+    <div class="container">
+        <h1 class="display-4 hero-title">Welcome to RideShare360</h1>
+        <p class="lead hero-text mx-auto" style="max-width: 700px;">
+            The official ride-sharing platform for Covenant University. Save money, travel safely, and connect with your community.
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            {% if current_user.is_authenticated %}
+                <a class="btn btn-light btn-lg px-4 gap-3 fw-bold text-primary" href="{{ url_for('main.rides') }}">
+                    <i class="fas fa-search me-2"></i>Find a Ride
+                </a>
+                <a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('main.create_ride') }}">
+                    <i class="fas fa-plus me-2"></i>Offer a Ride
+                </a>
+            {% else %}
+                <a class="btn btn-light btn-lg px-4 gap-3 fw-bold text-primary" href="{{ url_for('auth.register') }}">
+                    Get Started
+                </a>
+                <a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('auth.login') }}">
+                    Login
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row align-items-stretch g-4 mb-5">
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-5 text-center">
+                <div class="mb-3 text-primary">
+                    <i class="fas fa-car fa-3x"></i>
+                </div>
+                <h2 class="card-title fw-bold">For Drivers</h2>
+                <p class="card-text text-muted mb-4">
+                    Share your ride and split the cost. Help fellow students and staff commute easily while reducing your expenses.
+                </p>
+                <button class="btn btn-outline-primary rounded-pill px-4" type="button">Learn More</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-5 text-center">
+                <div class="mb-3 text-secondary">
+                    <i class="fas fa-users fa-3x"></i>
+                </div>
+                <h2 class="card-title fw-bold">For Riders</h2>
+                <p class="card-text text-muted mb-4">
+                    Find convenient rides to and from campus. Safe, verified, and affordable travel with members of your community.
+                </p>
+                <button class="btn btn-outline-secondary rounded-pill px-4" type="button">Learn More</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-dark flex-shrink-0 me-3 rounded-3 p-3">
+            <i class="fas fa-shield-alt fa-2x text-primary"></i>
+        </div>
+        <div>
+            <h3 class="fw-bold">Safe & Secure</h3>
+            <p>Verified profiles ensuring you travel with trusted members of the Covenant University community.</p>
+        </div>
+    </div>
+    <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-dark flex-shrink-0 me-3 rounded-3 p-3">
+            <i class="fas fa-coins fa-2x text-primary"></i>
+        </div>
+        <div>
+            <h3 class="fw-bold">Cost Effective</h3>
+            <p>Split fuel costs and save money on every trip. Use our savings calculator to see your potential savings.</p>
+        </div>
+    </div>
+    <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-dark flex-shrink-0 me-3 rounded-3 p-3">
+            <i class="fas fa-leaf fa-2x text-primary"></i>
+        </div>
+        <div>
+            <h3 class="fw-bold">Eco-Friendly</h3>
+            <p>Reduce carbon footprint by carpooling. Help make our campus and environment greener.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
