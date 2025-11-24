@@ -2,40 +2,70 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">Offer a Ride</div>
-            <div class="card-body">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-lg rounded-3">
+            <div class="card-header bg-primary text-white p-4 rounded-top-3">
+                <h3 class="mb-0 fw-bold"><i class="fas fa-car-side me-2"></i>Offer a Ride</h3>
+                <p class="mb-0 opacity-75">Share your journey and save costs</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
                 <form method="POST">
-                    <div class="mb-3">
-                        <label for="origin" class="form-label">Origin</label>
-                        <input type="text" class="form-control" id="origin" name="origin" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="destination" class="form-label">Destination</label>
-                        <input type="text" class="form-control" id="destination" name="destination" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="date" class="form-label">Date</label>
-                            <input type="date" class="form-control" id="date" name="date" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="time" class="form-label">Time</label>
-                            <input type="time" class="form-control" id="time" name="time" required>
+                    <div class="mb-4">
+                        <label for="origin" class="form-label fw-semibold text-secondary">From (Origin)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-map-marker-alt text-primary"></i></span>
+                            <input type="text" class="form-control border-start-0 bg-light" id="origin" name="origin" placeholder="e.g. Covenant University Gate" required>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="seats" class="form-label">Available Seats</label>
-                            <input type="number" class="form-control" id="seats" name="seats" min="1" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="price" class="form-label">Price (₦)</label>
-                            <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" required>
+                    
+                    <div class="mb-4">
+                        <label for="destination" class="form-label fw-semibold text-secondary">To (Destination)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-map-pin text-danger"></i></span>
+                            <input type="text" class="form-control border-start-0 bg-light" id="destination" name="destination" placeholder="e.g. Ikeja City Mall" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Create Ride</button>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="date" class="form-label fw-semibold text-secondary">Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="far fa-calendar-alt text-muted"></i></span>
+                                <input type="date" class="form-control border-start-0 bg-light" id="date" name="date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="time" class="form-label fw-semibold text-secondary">Time</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="far fa-clock text-muted"></i></span>
+                                <input type="time" class="form-control border-start-0 bg-light" id="time" name="time" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="seats" class="form-label fw-semibold text-secondary">Available Seats</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-chair text-muted"></i></span>
+                                <input type="number" class="form-control border-start-0 bg-light" id="seats" name="seats" min="1" placeholder="1-4" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="price" class="form-label fw-semibold text-secondary">Price per Seat (₦)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 fw-bold">₦</span>
+                                <input type="number" class="form-control border-start-0 bg-light" id="price" name="price" min="0" step="100" placeholder="0.00" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                            <i class="fas fa-check-circle me-2"></i>Create Ride
+                        </button>
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-light text-muted">Cancel</a>
+                    </div>
                 </form>
             </div>
         </div>

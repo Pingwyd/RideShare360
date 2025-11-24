@@ -2,52 +2,76 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">Commute Savings Calculator</div>
-            <div class="card-body">
-                <p>Compare the cost of RideShare360 vs. Standard Transport (e.g., Taxi/Uber).</p>
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-lg rounded-3">
+            <div class="card-header bg-success text-white p-4 rounded-top-3">
+                <h3 class="mb-0 fw-bold"><i class="fas fa-calculator me-2"></i>Savings Calculator</h3>
+                <p class="mb-0 opacity-75">See how much you can save with RideShare360</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <p class="text-muted mb-4">Compare the cost of RideShare360 vs. Standard Transport (e.g., Taxi/Uber).</p>
                 
                 <form id="calcForm">
-                    <div class="mb-3">
-                        <label for="distance" class="form-label">Distance (km)</label>
-                        <input type="number" class="form-control" id="distance" required>
+                    <div class="mb-4">
+                        <label for="distance" class="form-label fw-semibold">Distance (km)</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control bg-light border-end-0" id="distance" placeholder="e.g. 15" required>
+                            <span class="input-group-text bg-light border-start-0 text-muted">km</span>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="trips" class="form-label">Trips per week</label>
-                        <input type="number" class="form-control" id="trips" value="5" required>
+                    <div class="mb-4">
+                        <label for="trips" class="form-label fw-semibold">Trips per week</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control bg-light border-end-0" id="trips" value="5" required>
+                            <span class="input-group-text bg-light border-start-0 text-muted">trips</span>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Calculate Savings</button>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg fw-bold shadow-sm">
+                            <i class="fas fa-coins me-2"></i>Calculate Savings
+                        </button>
+                    </div>
                 </form>
                 
-                <div id="results" class="mt-4 d-none">
-                    <hr>
-                    <h4>Weekly Costs</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card bg-light">
-                                <div class="card-body text-center">
-                                    <h5>Standard Transport</h5>
-                                    <h3 class="text-danger">₦<span id="standardCost">0</span></h3>
-                                    <small class="text-muted">Est. ₦200/km</small>
+                <div id="results" class="mt-5 d-none">
+                    <div class="text-center mb-4">
+                        <h4 class="fw-bold text-secondary">Weekly Cost Comparison</h4>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="card bg-danger bg-opacity-10 border-0 h-100">
+                                <div class="card-body text-center p-3">
+                                    <h6 class="text-danger fw-bold mb-2">Standard</h6>
+                                    <h3 class="text-danger fw-bold mb-1">₦<span id="standardCost">0</span></h3>
+                                    <small class="text-muted" style="font-size: 0.75rem;">Est. ₦200/km</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card bg-light">
-                                <div class="card-body text-center">
-                                    <h5>RideShare360</h5>
-                                    <h3 class="text-success">₦<span id="rideShareCost">0</span></h3>
-                                    <small class="text-muted">Est. ₦50/km (Shared)</small>
+                        <div class="col-6">
+                            <div class="card bg-success bg-opacity-10 border-0 h-100">
+                                <div class="card-body text-center p-3">
+                                    <h6 class="text-success fw-bold mb-2">RideShare360</h6>
+                                    <h3 class="text-success fw-bold mb-1">₦<span id="rideShareCost">0</span></h3>
+                                    <small class="text-muted" style="font-size: 0.75rem;">Est. ₦50/km</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="alert alert-success mt-3 text-center">
-                        You could save <strong>₦<span id="savings">0</span></strong> per week!
+                    
+                    <div class="alert alert-success mt-4 text-center border-0 shadow-sm">
+                        <h5 class="mb-0">You could save <strong class="fs-3">₦<span id="savings">0</span></strong> per week!</h5>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
         </div>
     </div>
 </div>
