@@ -10,6 +10,8 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
     return render_template('index.html')
 
 @main_bp.route('/dashboard')
@@ -19,13 +21,26 @@ def dashboard():
     my_bookings = Booking.query.filter_by(rider_id=current_user.id).all()
     return render_template('dashboard.html', my_rides=my_rides, my_bookings=my_bookings)
 
+@main_bp.route('/profile/edit', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    if request.method == 'POST':
+        current_user.name = request.form.get('name')
+        current_user.phone = request.form.get('phone')
+        current_user.student_staff_id = request.form.get('student_staff_id')
+        db.session.commit()
+        flash('Profile updated successfully.', 'success')
+        return redirect(url_for('main.profile'))
+    return render_template('edit_profile.html')
+
 @main_bp.route('/rides')
 def rides():
     origin = request.args.get('origin')
     destination = request.args.get('destination')
     date_str = request.args.get('date')
     
-    query = Ride.query.filter(Ride.status == 'open')
+    # Filter for open rides with available seats
+    query = Ride.query.filter(Ride.status == 'open', Ride.seats > 0)
     
     if origin:
         query = query.filter(Ride.origin.ilike(f'%{origin}%'))
@@ -40,6 +55,56 @@ def rides():
             
     rides = query.order_by(Ride.date, Ride.time).all()
     return render_template('rides.html', rides=rides)
+
+@main_bp.route('/bookings/<int:booking_id>/approve')
+@login_required
+def approve_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    ride = Ride.query.get(booking.ride_id)
+    if ride.driver_id != current_user.id:
+        abort(403)
+    
+    if ride.seats <= 0:
+        flash('No seats available to approve this booking.', 'danger')
+        return redirect(url_for('main.ride_details', ride_id=ride.id))
+
+    booking.status = 'approved'
+    ride.seats -= 1 # Decrement seat count upon approval
+    db.session.commit()
+    flash('Booking approved. Rider can now pay.', 'success')
+    return redirect(url_for('main.ride_details', ride_id=ride.id))
+
+@main_bp.route('/bookings/<int:booking_id>/pay', methods=['POST'])
+@login_required
+def pay_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    if booking.rider_id != current_user.id:
+        flash('Unauthorized action.', 'danger')
+        return redirect(url_for('main.dashboard'))
+    
+    if booking.status != 'approved':
+        flash('Booking must be approved by driver before payment.', 'warning')
+        return redirect(url_for('main.ride_details', ride_id=booking.ride_id))
+        
+    ride = Ride.query.get(booking.ride_id)
+    
+    # Simulate payment
+    payment = Payment(
+        ride_id=ride.id,
+        payer_id=current_user.id,
+        amount=ride.price,
+        status='completed',
+        transaction_id=f'TXN-{datetime.utcnow().timestamp()}',
+        paid_at=datetime.utcnow()
+    )
+    
+    booking.status = 'confirmed'
+    # ride.seats -= booking.seats_booked # Removed: Seats already deducted on approval
+    db.session.add(payment)
+    db.session.commit()
+    
+    flash('Payment successful! Booking confirmed.', 'success')
+    return redirect(url_for('main.ride_details', ride_id=ride.id))
 
 @main_bp.route('/rides/create', methods=['GET', 'POST'])
 @login_required
@@ -162,19 +227,6 @@ def book_ride(ride_id):
     flash('Booking requested!', 'success')
     return redirect(url_for('main.ride_details', ride_id=ride_id))
 
-@main_bp.route('/bookings/<int:booking_id>/approve')
-@login_required
-def approve_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
-    ride = Ride.query.get(booking.ride_id)
-    if ride.driver_id != current_user.id:
-        abort(403)
-        
-    booking.status = 'approved'
-    db.session.commit()
-    flash('Booking approved. Rider can now pay.', 'success')
-    return redirect(url_for('main.ride_details', ride_id=ride.id))
-
 @main_bp.route('/bookings/<int:booking_id>/reject')
 @login_required
 def reject_booking(booking_id):
@@ -186,38 +238,6 @@ def reject_booking(booking_id):
     booking.status = 'rejected'
     db.session.commit()
     flash('Booking rejected.', 'info')
-    return redirect(url_for('main.ride_details', ride_id=ride.id))
-
-@main_bp.route('/bookings/<int:booking_id>/pay', methods=['POST'])
-@login_required
-def pay_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
-    if booking.rider_id != current_user.id:
-        flash('Unauthorized action.', 'danger')
-        return redirect(url_for('main.dashboard'))
-    
-    if booking.status != 'approved':
-        flash('Booking must be approved by driver before payment.', 'warning')
-        return redirect(url_for('main.ride_details', ride_id=booking.ride_id))
-        
-    ride = Ride.query.get(booking.ride_id)
-    
-    # Simulate payment
-    payment = Payment(
-        ride_id=ride.id,
-        payer_id=current_user.id,
-        amount=ride.price,
-        status='completed',
-        transaction_id=f'TXN-{datetime.utcnow().timestamp()}',
-        paid_at=datetime.utcnow()
-    )
-    
-    booking.status = 'confirmed'
-    ride.seats -= booking.seats_booked # Deduct seats
-    db.session.add(payment)
-    db.session.commit()
-    
-    flash('Payment successful! Booking confirmed.', 'success')
     return redirect(url_for('main.ride_details', ride_id=ride.id))
 
 @main_bp.route('/rides/<int:ride_id>/rate/<int:user_id>', methods=['GET', 'POST'])
@@ -347,6 +367,22 @@ def cancel_ride(ride_id):
     flash('Ride cancelled.', 'warning')
     return redirect(url_for('main.ride_details', ride_id=ride.id))
 
+@main_bp.route('/rides/<int:ride_id>/chat')
+@login_required
+def ride_chat(ride_id):
+    ride = Ride.query.get_or_404(ride_id)
+    
+    # Check if user is driver or confirmed rider
+    is_driver = ride.driver_id == current_user.id
+    is_rider = Booking.query.filter_by(ride_id=ride_id, rider_id=current_user.id, status='confirmed').first() is not None
+    
+    if not (is_driver or is_rider):
+        flash('You are not authorized to view this chat.', 'danger')
+        return redirect(url_for('main.dashboard'))
+        
+    messages = Message.query.filter_by(ride_id=ride_id).order_by(Message.timestamp).all()
+    return render_template('chat.html', ride=ride, messages=messages)
+
 @main_bp.route('/report/user/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def report_user(user_id):
@@ -390,4 +426,3 @@ def report_ride(ride_id):
         return redirect(url_for('main.ride_details', ride_id=ride_id))
         
     return render_template('report.html')
-

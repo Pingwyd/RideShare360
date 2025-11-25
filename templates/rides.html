@@ -3,33 +3,41 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold m-0"><i class="fas fa-search-location me-2 text-primary"></i>Find a Ride</h2>
-    <a href="{{ url_for('main.create_ride') }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i> Offer a Ride</a>
+    <a href="{{ url_for('main.create_ride') }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus me-1"></i>
+        Offer a Ride</a>
 </div>
 
 <div class="card border-0 shadow-sm mb-5">
-    <div class="card-body p-4 bg-light rounded-3">
+    <div class="card-body p-4 bg-surface rounded-3">
         <form method="GET" action="{{ url_for('main.rides') }}">
             <div class="row g-3">
                 <div class="col-md-3">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
-                        <input type="text" name="origin" class="form-control border-start-0" placeholder="From (Origin)" value="{{ request.args.get('origin', '') }}">
+                        <span class="input-group-text bg-surface border-end-0"><i
+                                class="fas fa-map-marker-alt text-muted"></i></span>
+                        <input type="text" name="origin" class="form-control border-start-0" placeholder="From (Origin)"
+                            value="{{ request.args.get('origin', '') }}">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-pin text-muted"></i></span>
-                        <input type="text" name="destination" class="form-control border-start-0" placeholder="To (Destination)" value="{{ request.args.get('destination', '') }}">
+                        <span class="input-group-text bg-surface border-end-0"><i
+                                class="fas fa-map-pin text-muted"></i></span>
+                        <input type="text" name="destination" class="form-control border-start-0"
+                            placeholder="To (Destination)" value="{{ request.args.get('destination', '') }}">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0"><i class="far fa-calendar-alt text-muted"></i></span>
-                        <input type="date" name="date" class="form-control border-start-0" value="{{ request.args.get('date', '') }}">
+                        <span class="input-group-text bg-surface border-end-0"><i
+                                class="far fa-calendar-alt text-muted"></i></span>
+                        <input type="date" name="date" class="form-control border-start-0"
+                            value="{{ request.args.get('date', '') }}">
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-100 fw-bold"><i class="fas fa-search me-1"></i> Search Rides</button>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold"><i class="fas fa-search me-1"></i>
+                        Search Rides</button>
                 </div>
             </div>
         </form>
@@ -38,13 +46,14 @@
 
 <div class="list-group shadow-sm rounded-3 border-0 overflow-hidden">
     {% for ride in rides %}
-    <a href="{{ url_for('main.ride_details', ride_id=ride.id) }}" class="list-group-item list-group-item-action p-4 border-start-0 border-end-0 hover-bg-light transition-all">
+    <a href="{{ url_for('main.ride_details', ride_id=ride.id) }}"
+        class="list-group-item list-group-item-action p-4 border-start-0 border-end-0 hover-bg-light transition-all">
         <div class="row align-items-center">
             <div class="col-md-8">
                 <div class="d-flex align-items-center mb-2">
-                    <h5 class="mb-0 fw-bold text-dark">{{ ride.origin }}</h5>
+                    <h5 class="mb-0 fw-bold text-main">{{ ride.origin }}</h5>
                     <i class="fas fa-long-arrow-alt-right mx-3 text-primary fa-lg"></i>
-                    <h5 class="mb-0 fw-bold text-dark">{{ ride.destination }}</h5>
+                    <h5 class="mb-0 fw-bold text-main">{{ ride.destination }}</h5>
                 </div>
                 <div class="text-muted small mb-2 mb-md-0">
                     <span class="me-3"><i class="far fa-calendar me-1"></i> {{ ride.date }}</span>
@@ -58,7 +67,8 @@
                     <span class="text-muted small">/ seat</span>
                 </div>
                 <div>
-                    <span class="badge bg-light text-dark border me-2"><i class="fas fa-chair me-1"></i> {{ ride.seats }} seats left</span>
+                    <span class="badge bg-surface text-main border me-2"><i class="fas fa-chair me-1"></i> {{ ride.seats
+                        }} seats left</span>
                     <span class="btn btn-sm btn-outline-primary rounded-pill">View Details</span>
                 </div>
             </div>

@@ -3,71 +3,90 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
-        <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
-            <div class="card-header bg-white p-4 border-bottom">
+        <div class="mb-4">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                <i class="fas fa-arrow-left me-1"></i> Back
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-lg overflow-hidden">
+            <div class="card-header p-4 border-bottom border-secondary">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0 fw-bold text-primary">Ride Details</h4>
-                    <span class="badge bg-{{ 'success' if ride.status == 'open' else 'secondary' }} rounded-pill px-3 py-2">
+                    <div>
+                        <h6 class="text-uppercase text-muted small fw-bold mb-1">Ride Details</h6>
+                        <h4 class="mb-0 fw-bold text-main">Trip Information</h4>
+                    </div>
+                    <span
+                        class="badge bg-{{ 'success' if ride.status == 'open' else 'secondary' }} rounded-pill px-3 py-2">
                         {{ ride.status|upper }}
                     </span>
                 </div>
             </div>
-            
-            <div class="card-body p-4">
-                <div class="row mb-4 align-items-center">
+
+            <div class="card-body p-5">
+                <div class="row mb-5 align-items-center position-relative">
                     <div class="col-md-5 text-center text-md-start">
-                        <h3 class="fw-bold mb-0">{{ ride.origin }}</h3>
-                        <p class="text-muted small">Origin</p>
+                        <h2 class="fw-bold mb-1 text-primary">{{ ride.origin }}</h2>
+                        <p class="text-muted text-uppercase small fw-bold tracking-wide">Origin</p>
                     </div>
-                    <div class="col-md-2 text-center my-3 my-md-0">
-                        <i class="fas fa-arrow-right text-primary fa-2x d-none d-md-inline"></i>
-                        <i class="fas fa-arrow-down text-primary fa-2x d-md-none"></i>
+                    <div class="col-md-2 text-center my-4 my-md-0 position-relative">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="bg-surface rounded-circle p-2 border border-secondary z-2 position-relative">
+                                <i class="fas fa-arrow-right text-muted d-none d-md-block"></i>
+                                <i class="fas fa-arrow-down text-muted d-md-none"></i>
+                            </div>
+                        </div>
+                        <div class="position-absolute top-50 start-0 w-100 border-top border-secondary border-dashed d-none d-md-block"
+                            style="z-index: 0;"></div>
                     </div>
                     <div class="col-md-5 text-center text-md-end">
-                        <h3 class="fw-bold mb-0">{{ ride.destination }}</h3>
-                        <p class="text-muted small">Destination</p>
+                        <h2 class="fw-bold mb-1 text-primary">{{ ride.destination }}</h2>
+                        <p class="text-muted text-uppercase small fw-bold tracking-wide">Destination</p>
                     </div>
                 </div>
 
                 <div class="row g-4 mb-5">
-                    <div class="col-6 col-md-3 text-center">
-                        <div class="p-3 bg-light rounded-3">
-                            <i class="far fa-calendar-alt text-primary fa-lg mb-2"></i>
-                            <h6 class="fw-bold mb-0">{{ ride.date }}</h6>
+                    <div class="col-6 col-md-3">
+                        <div class="p-4 bg-surface rounded-4 border border-secondary text-center h-100 hover-lift">
+                            <i class="far fa-calendar-alt text-accent fa-lg mb-3"
+                                style="color: var(--accent-color);"></i>
+                            <h6 class="fw-bold mb-1">{{ ride.date }}</h6>
                             <small class="text-muted">Date</small>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3 text-center">
-                        <div class="p-3 bg-light rounded-3">
-                            <i class="far fa-clock text-primary fa-lg mb-2"></i>
-                            <h6 class="fw-bold mb-0">{{ ride.time }}</h6>
+                    <div class="col-6 col-md-3">
+                        <div class="p-4 bg-surface rounded-4 border border-secondary text-center h-100 hover-lift">
+                            <i class="far fa-clock text-info fa-lg mb-3"></i>
+                            <h6 class="fw-bold mb-1">{{ ride.time }}</h6>
                             <small class="text-muted">Time</small>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3 text-center">
-                        <div class="p-3 bg-light rounded-3">
-                            <i class="fas fa-coins text-primary fa-lg mb-2"></i>
-                            <h6 class="fw-bold mb-0">₦{{ ride.price }}</h6>
+                    <div class="col-6 col-md-3">
+                        <div class="p-4 bg-surface rounded-4 border border-secondary text-center h-100 hover-lift">
+                            <i class="fas fa-coins text-warning fa-lg mb-3"></i>
+                            <h6 class="fw-bold mb-1">₦{{ ride.price }}</h6>
                             <small class="text-muted">Price</small>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3 text-center">
-                        <div class="p-3 bg-light rounded-3">
-                            <i class="fas fa-chair text-primary fa-lg mb-2"></i>
-                            <h6 class="fw-bold mb-0">{{ ride.seats }}</h6>
+                    <div class="col-6 col-md-3">
+                        <div class="p-4 bg-surface rounded-4 border border-secondary text-center h-100 hover-lift">
+                            <i class="fas fa-chair text-success fa-lg mb-3"></i>
+                            <h6 class="fw-bold mb-1">{{ ride.seats }}</h6>
                             <small class="text-muted">Seats Left</small>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center p-3 bg-primary bg-opacity-10 rounded-3 mb-4">
-                    <div class="me-3">
+                <div class="d-flex align-items-center p-4 bg-surface border border-secondary rounded-4 mb-5">
+                    <div class="me-4">
                         {% if driver.photo_url %}
-                            <img src="{{ driver.photo_url }}" class="rounded-circle" width="60" height="60" style="object-fit: cover;">
+                        <img src="{{ driver.photo_url }}" class="rounded-circle border border-2 border-primary"
+                            width="70" height="70" style="object-fit: cover;">
                         {% else %}
-                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 24px;">
-                                {{ driver.name[0] | upper }}
-                            </div>
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm"
+                            style="width: 70px; height: 70px; font-size: 28px;">
+                            {{ driver.name[0] | upper }}
+                        </div>
                         {% endif %}
                     </div>
                     <div class="flex-grow-1">
@@ -80,104 +99,137 @@
                         </div>
                     </div>
                     {% if current_user.is_authenticated and ride.driver_id != current_user.id %}
-                        <a href="{{ url_for('main.report_user', user_id=driver.id) }}" class="btn btn-outline-danger btn-sm rounded-pill">
-                            <i class="fas fa-flag me-1"></i> Report
-                        </a>
+                    <a href="{{ url_for('main.report_user', user_id=driver.id) }}"
+                        class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                        <i class="fas fa-flag me-1"></i> Report
+                    </a>
                     {% endif %}
                 </div>
-                
+
                 {% if current_user.is_authenticated %}
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        {% if ride.driver_id != current_user.id %}
-                             <a href="{{ url_for('main.report_ride', ride_id=ride.id) }}" class="btn btn-link text-danger text-decoration-none me-auto">Report Ride</a>
-                             <!-- Add booking button logic here if needed -->
-                        {% endif %}
-                        
-                        {% if ride.driver_id == current_user.id %}
-                            {% if ride.status == 'open' %}
-                                <a href="{{ url_for('main.edit_ride', ride_id=ride.id) }}" class="btn btn-warning text-white fw-bold">
-                                    <i class="fas fa-edit me-1"></i> Edit
-                                </a>
-                                <form action="{{ url_for('main.cancel_ride', ride_id=ride.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this ride?');">
-                                    <button type="submit" class="btn btn-danger fw-bold">
-                                        <i class="fas fa-times me-1"></i> Cancel
-                                    </button>
-                                </form>
-                                <form action="{{ url_for('main.complete_ride', ride_id=ride.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Mark ride as completed?');">
-                                    <button type="submit" class="btn btn-success fw-bold">
-                                        <i class="fas fa-check me-1"></i> Complete
-                                    </button>
-                                </form>
-                            {% endif %}
-                            <a href="{{ url_for('main.ride_chat', ride_id=ride.id) }}" class="btn btn-info text-white fw-bold">
-                                <i class="fas fa-comments me-1"></i> Chat
-                            </a>
-                        {% endif %}
-                    </div>
-                    
-                    {% if ride.driver_id == current_user.id and driver_bookings %}
-                        <hr class="my-4">
-                        <h5 class="fw-bold mb-3">Bookings</h5>
-                        <div class="list-group">
-                            {% for b in driver_bookings %}
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="fw-bold">Booking #{{ b.id }}</span>
-                                    <span class="text-muted mx-2">|</span>
-                                    <span class="text-muted">Rider ID: {{ b.rider_id }}</span>
-                                </div>
-                                <span class="badge bg-{{ 'success' if b.status == 'accepted' else 'warning' }} rounded-pill">
-                                    {{ b.status }}
-                                </span>
-                            </div>
-                            {% endfor %}
-                        </div>
+                <div class="d-grid gap-3 d-md-flex justify-content-md-end mb-4">
+                    {% if ride.driver_id != current_user.id %}
+                    <a href="{{ url_for('main.report_ride', ride_id=ride.id) }}"
+                        class="btn btn-link text-danger text-decoration-none me-auto">Report Ride</a>
                     {% endif %}
+
+                    {% if ride.driver_id == current_user.id %}
+                    {% if ride.status == 'open' %}
+                    <a href="{{ url_for('main.edit_ride', ride_id=ride.id) }}"
+                        class="btn btn-warning text-dark fw-bold px-4">
+                        <i class="fas fa-edit me-2"></i>Edit
+                    </a>
+                    <form action="{{ url_for('main.cancel_ride', ride_id=ride.id) }}" method="POST" class="d-inline"
+                        onsubmit="return confirm('Are you sure you want to cancel this ride?');">
+                        <button type="submit" class="btn btn-danger fw-bold px-4">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </button>
+                    </form>
+                    <form action="{{ url_for('main.complete_ride', ride_id=ride.id) }}" method="POST" class="d-inline"
+                        onsubmit="return confirm('Mark ride as completed?');">
+                        <button type="submit" class="btn btn-success fw-bold px-4">
+                            <i class="fas fa-check me-2"></i>Complete
+                        </button>
+                    </form>
+                    {% endif %}
+                    <a href="{{ url_for('main.ride_chat', ride_id=ride.id) }}"
+                        class="btn btn-info text-white fw-bold px-4">
+                        <i class="fas fa-comments me-2"></i>Chat
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% if ride.driver_id == current_user.id %}
+                <!-- Driver View: Bookings -->
+                {% if driver_bookings %}
+                <hr class="border-secondary opacity-25 my-5">
+                <h4 class="fw-bold mb-4">Bookings</h4>
+                <div class="d-flex flex-column gap-3">
+                    {% for b in driver_bookings %}
+                    <div class="card border border-secondary bg-surface">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="fw-bold d-block mb-1">Booking #{{ b.id }}</span>
+                                <span class="text-muted small">Rider ID: {{ b.rider_id }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span
+                                    class="badge bg-{{ 'success' if b.status == 'accepted' or b.status == 'confirmed' or b.status == 'approved' else 'warning' }} rounded-pill px-3">
+                                    {{ b.status|upper }}
+                                </span>
+
+                                {% if b.status == 'pending' %}
+                                <a href="{{ url_for('main.approve_booking', booking_id=b.id) }}"
+                                    class="btn btn-sm btn-success rounded-pill px-3">Approve</a>
+                                <a href="{{ url_for('main.reject_booking', booking_id=b.id) }}"
+                                    class="btn btn-sm btn-danger rounded-pill px-3">Reject</a>
+                                {% endif %}
+
+                                {% if b.status == 'confirmed' %}
+                                <a href="{{ url_for('main.rate_user', ride_id=ride.id, user_id=b.rider_id) }}"
+                                    class="btn btn-sm btn-outline-primary rounded-pill px-3">Rate Rider</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4 text-muted">
+                    <p>No bookings yet.</p>
+                </div>
                 {% endif %}
+
+                {% else %}
+                <!-- Rider View -->
+                {% if booking %}
+                <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
+                    <i class="fas fa-info-circle me-3 fs-4"></i>
+                    <div>
+                        <strong>Booking Status:</strong> {{ booking.status|upper }}
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mt-4">
+                    {% if booking.status == 'approved' %}
+                    <form action="{{ url_for('main.pay_booking', booking_id=booking.id) }}" method="POST"
+                        class="flex-grow-1">
+                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-lg">Pay Now
+                            (Simulate)</button>
+                    </form>
+                    {% endif %}
+
+                    {% if booking.status == 'confirmed' %}
+                    <a href="{{ url_for('main.ride_chat', ride_id=ride.id) }}"
+                        class="btn btn-info text-white fw-bold flex-grow-1">Open Chat</a>
+                    <a href="{{ url_for('main.receipt', booking_id=booking.id) }}"
+                        class="btn btn-secondary fw-bold">Receipt</a>
+                    <a href="{{ url_for('main.rate_user', ride_id=ride.id, user_id=ride.driver_id) }}"
+                        class="btn btn-outline-primary fw-bold">Rate Driver</a>
+                    {% endif %}
+                </div>
+                {% else %}
+                {% if ride.status == 'open' and ride.seats > 0 %}
+                <form action="{{ url_for('main.book_ride', ride_id=ride.id) }}" method="POST" class="mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-lg">
+                        Book Ride <span class="ms-2 opacity-75">(₦{{ ride.price }})</span>
+                    </button>
+                </form>
+                {% elif ride.seats <= 0 %} <div class="alert alert-warning border-0 shadow-sm mt-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i> This ride is full.
             </div>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+
+            {% else %}
+            <div class="text-center mt-5">
+                <a href="{{ url_for('auth.login') }}"
+                    class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg">Login to Book</a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
-{% endblock %}
-                            {% if b.status == 'pending' %}
-                            <a href="{{ url_for('main.approve_booking', booking_id=b.id) }}" class="btn btn-sm btn-success">Approve</a>
-                            <a href="{{ url_for('main.reject_booking', booking_id=b.id) }}" class="btn btn-sm btn-danger">Reject</a>
-                            {% endif %}
-                            {% if b.status == 'confirmed' %}
-                            <a href="{{ url_for('main.rate_user', ride_id=ride.id, user_id=b.rider_id) }}" class="btn btn-sm btn-outline-primary">Rate Rider</a>
-                            {% endif %}
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>No bookings yet.</p>
-                {% endif %}
-                
-            {% else %}
-                {% if booking %}
-                    <div class="alert alert-info">
-                        Booking Status: {{ booking.status }}
-                    </div>
-                    {% if booking.status == 'approved' %}
-                        <form action="{{ url_for('main.pay_booking', booking_id=booking.id) }}" method="POST" class="d-inline">
-                            <button type="submit" class="btn btn-success">Pay Now (Simulate)</button>
-                        </form>
-                    {% endif %}
-                    {% if booking.status == 'confirmed' %}
-                        <a href="{{ url_for('main.ride_chat', ride_id=ride.id) }}" class="btn btn-info">Open Chat</a>
-                        <a href="{{ url_for('main.receipt', booking_id=booking.id) }}" class="btn btn-secondary">View Receipt</a>
-                        <a href="{{ url_for('main.rate_user', ride_id=ride.id, user_id=ride.driver_id) }}" class="btn btn-outline-primary">Rate Driver</a>
-                    {% endif %}
-                {% else %}
-                    <form action="{{ url_for('main.book_ride', ride_id=ride.id) }}" method="POST">
-                        <button type="submit" class="btn btn-success">Book Ride</button>
-                    </form>
-                {% endif %}
-            {% endif %}
-        {% else %}
-            <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Book</a>
-        {% endif %}
-    </div>
 </div>
 {% endblock %}

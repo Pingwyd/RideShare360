@@ -1,97 +1,169 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-4">
-        <div class="card mb-4 border-0 shadow-sm">
-            <div class="card-body text-center p-4">
-                {% if current_user.photo_url %}
-                <img src="{{ current_user.photo_url }}" class="rounded-circle mb-3 shadow-sm" width="120" height="120" style="object-fit: cover;">
-                {% else %}
-                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 text-primary fw-bold" style="width: 120px; height: 120px; font-size: 48px;">
-                    {{ current_user.name[0] | upper }}
-                </div>
-                {% endif %}
-                <h4 class="fw-bold mb-1">{{ current_user.name }}</h4>
-                <p class="text-muted mb-2">{{ current_user.email }}</p>
-                <div class="mb-3">
-                    {% if current_user.verified %}
-                    <span class="badge bg-success rounded-pill px-3 py-2"><i class="fas fa-check-circle me-1"></i> Verified</span>
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-lg overflow-hidden sticky-top" style="top: 100px;">
+            <div class="card-body text-center p-5">
+                <div class="position-relative d-inline-block mb-4">
+                    {% if current_user.photo_url %}
+                    <img src="{{ current_user.photo_url }}"
+                        class="rounded-circle shadow-lg border border-4 border-secondary" width="140" height="140"
+                        style="object-fit: cover;">
                     {% else %}
-                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2"><i class="fas fa-clock me-1"></i> Pending Verification</span>
+                    <div class="bg-surface rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg border border-4 border-secondary text-primary fw-bold"
+                        style="width: 140px; height: 140px; font-size: 56px;">
+                        {{ current_user.name[0] | upper }}
+                    </div>
+                    {% endif %}
+                    {% if current_user.verified %}
+                    <div class="position-absolute bottom-0 end-0 bg-success rounded-circle p-2 border border-4 border-dark"
+                        title="Verified">
+                        <i class="fas fa-check text-white"></i>
+                    </div>
                     {% endif %}
                 </div>
-                <div class="d-flex justify-content-center align-items-center mb-3">
+
+                <h3 class="fw-bold mb-1">{{ current_user.name }}</h3>
+                <p class="text-muted mb-3">{{ current_user.email }}</p>
+
+                <div
+                    class="d-flex justify-content-center align-items-center mb-4 bg-surface rounded-pill py-2 px-4 d-inline-flex border border-secondary">
                     <div class="text-warning me-2">
-                        {% for i in range(5) %}
-                            {% if i < current_user.rating_avg|round|int %}
-                                <i class="fas fa-star"></i>
-                            {% else %}
-                                <i class="far fa-star"></i>
-                            {% endif %}
-                        {% endfor %}
+                        <i class="fas fa-star"></i>
                     </div>
-                    <span class="fw-bold">{{ "%.1f"|format(current_user.rating_avg) }}</span>
-                    <span class="text-muted ms-1">/ 5.0</span>
+                    <span class="fw-bold fs-5 text-main">{{ "%.1f"|format(current_user.rating_avg) }}</span>
+                    <span class="text-muted ms-1 small">Rating</span>
                 </div>
-                <a href="{{ url_for('main.profile') }}" class="btn btn-outline-primary btn-sm rounded-pill px-4">Edit Profile</a>
+
+                <div class="d-grid">
+                    <a href="{{ url_for('main.profile') }}" class="btn btn-outline-primary rounded-pill fw-bold">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-8">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="fw-bold m-0"><i class="fas fa-steering-wheel me-2 text-primary"></i>My Offered Rides</h3>
-            <a href="{{ url_for('main.create_ride') }}" class="btn btn-primary btn-sm rounded-pill"><i class="fas fa-plus me-1"></i> Offer Ride</a>
+            <a href="{{ url_for('main.create_ride') }}" class="btn btn-primary btn-sm rounded-pill px-3"><i
+                    class="fas fa-plus me-1"></i> Offer Ride</a>
         </div>
-        
+
         {% if my_rides %}
-        <div class="list-group mb-5 shadow-sm rounded-3 overflow-hidden border-0">
+        <div class="d-flex flex-column gap-3 mb-5">
             {% for ride in my_rides %}
-            <a href="{{ url_for('main.ride_details', ride_id=ride.id) }}" class="list-group-item list-group-item-action p-3 border-start-0 border-end-0">
-                <div class="d-flex w-100 justify-content-between align-items-center mb-2">
-                    <h5 class="mb-0 fw-bold text-primary">
-                        {{ ride.origin }} <i class="fas fa-arrow-right mx-2 text-muted small"></i> {{ ride.destination }}
-                    </h5>
-                    <span class="badge bg-light text-dark border">{{ ride.status }}</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="text-muted small">
-                        <i class="far fa-calendar-alt me-1"></i> {{ ride.date }} &nbsp;|&nbsp; 
-                        <i class="far fa-clock me-1"></i> {{ ride.time }}
+            <a href="{{ url_for('main.ride_details', ride_id=ride.id) }}"
+                class="card text-decoration-none border-0 shadow-sm hover-lift">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                                <i class="fas fa-car me-1"></i> Driver
+                            </span>
+                            <span
+                                class="badge bg-{{ 'success' if ride.status == 'open' else 'secondary' }} rounded-pill">
+                                {{ ride.status|upper }}
+                            </span>
+                        </div>
+                        <h4 class="fw-bold text-success mb-0">₦{{ ride.price }}</h4>
                     </div>
-                    <div class="fw-bold">
-                        <span class="me-3"><i class="fas fa-chair me-1 text-secondary"></i> {{ ride.seats }} seats</span>
-                        <span class="text-success">₦{{ ride.price }}</span>
+
+                    <div class="row align-items-center g-3">
+                        <div class="col-md-5">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-surface p-2 me-3 text-muted">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block text-uppercase fw-bold"
+                                        style="font-size: 0.7rem;">From</small>
+                                    <span class="fw-bold text-main">{{ ride.origin }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center d-none d-md-block">
+                            <i class="fas fa-arrow-right text-muted"></i>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-surface p-2 me-3 text-muted">
+                                    <i class="fas fa-map-pin"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted d-block text-uppercase fw-bold"
+                                        style="font-size: 0.7rem;">To</small>
+                                    <span class="fw-bold text-main">{{ ride.destination }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-secondary opacity-25 my-3">
+
+                    <div class="d-flex justify-content-between align-items-center text-muted small">
+                        <div>
+                            <i class="far fa-calendar-alt me-1"></i> {{ ride.date }}
+                            <span class="mx-2">•</span>
+                            <i class="far fa-clock me-1"></i> {{ ride.time }}
+                        </div>
+                        <div>
+                            <i class="fas fa-chair me-1"></i> {{ ride.seats }} seats left
+                        </div>
                     </div>
                 </div>
             </a>
             {% endfor %}
         </div>
         {% else %}
-        <div class="alert alert-light text-center py-4 mb-5 border shadow-sm">
-            <div class="mb-3 text-muted"><i class="fas fa-car fa-3x opacity-25"></i></div>
-            <p class="mb-3">You haven't offered any rides yet.</p>
-            <a href="{{ url_for('main.create_ride') }}" class="btn btn-outline-primary btn-sm">Start Driving</a>
+        <div class="card border-0 border-dashed border-secondary bg-transparent mb-5">
+            <div class="card-body text-center py-5">
+                <div class="mb-3 text-muted opacity-25"><i class="fas fa-car fa-4x"></i></div>
+                <h5 class="text-muted">You haven't offered any rides yet.</h5>
+                <a href="{{ url_for('main.create_ride') }}" class="btn btn-link text-primary text-decoration-none">Start
+                    driving today</a>
+            </div>
         </div>
         {% endif %}
 
-        <h3 class="fw-bold mb-3"><i class="fas fa-ticket-alt me-2 text-secondary"></i>My Bookings</h3>
+        <h3 class="fw-bold mb-4"><i class="fas fa-ticket-alt me-2 text-accent"
+                style="color: var(--accent-color);"></i>My Bookings</h3>
         {% if my_bookings %}
-        <div class="list-group">
+        <div class="d-flex flex-column gap-3">
             {% for booking in my_bookings %}
-            <a href="{{ url_for('main.ride_details', ride_id=booking.ride_id) }}" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Booking #{{ booking.id }}</h5>
-                    <small>{{ booking.status }}</small>
+            <a href="{{ url_for('main.ride_details', ride_id=booking.ride_id) }}"
+                class="card text-decoration-none border-0 shadow-sm hover-lift">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-accent bg-opacity-10 text-accent rounded-circle p-3 d-flex align-items-center justify-content-center"
+                                style="width: 50px; height: 50px; color: var(--accent-color);">
+                                <i class="fas fa-ticket-alt fs-5"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0 text-main">Booking #{{ booking.id }}</h5>
+                                <small class="text-muted">Ride ID: {{ booking.ride_id }}</small>
+                            </div>
+                        </div>
+                        <span
+                            class="badge bg-{{ 'success' if booking.status == 'confirmed' else 'warning' }} rounded-pill px-3 py-2">
+                            {{ booking.status|upper }}
+                        </span>
+                    </div>
                 </div>
-                <p class="mb-1">Ride ID: {{ booking.ride_id }}</p>
             </a>
             {% endfor %}
         </div>
         {% else %}
-        <p>You haven't booked any rides yet.</p>
-        <a href="{{ url_for('main.rides') }}" class="btn btn-outline-primary">Find a Ride</a>
+        <div class="card border-0 border-dashed border-secondary bg-transparent">
+            <div class="card-body text-center py-5">
+                <p class="text-muted mb-0">You haven't booked any rides yet.</p>
+                <a href="{{ url_for('main.rides') }}" class="btn btn-link text-primary text-decoration-none">Find a
+                    ride</a>
+            </div>
+        </div>
         {% endif %}
     </div>
 </div>
